@@ -5,10 +5,12 @@
 NAPI_METHOD(int8_array_test) {
   NAPI_ARGV(1);
 
-  size_t c_byte_len, c_arr_len;
-  NAPI_GET_INT8_ARRAY(argv[0], inbound, &c_byte_len, &c_arr_len);
+  int8_t* inbound;
+  size_t byte_len, arr_len;
+  NAPI_GET_INT8_ARRAY(argv[0], inbound, &byte_len, &arr_len);
 
-  NAPI_CREATE_INT8_ARRAY(inbound, c_byte_len, c_arr_len, outbound);
+  napi_value outbound;
+  NAPI_CREATE_INT8_ARRAY(inbound, byte_len, arr_len, &outbound);
 
   return outbound;
 }
