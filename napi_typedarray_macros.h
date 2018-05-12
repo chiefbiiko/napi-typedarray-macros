@@ -11,7 +11,7 @@
   NAPI_GET_TYPEDARRAY(typedarray, arr, byte_len, arr_len);
 
 #define NAPI_CREATE_INT32_ARRAY(arr, byte_len, arr_len, typedarray) \
-  NAPI_CREATE_TYPEDARRAY(int*, arr, byte_len, arr_len, napi_int32_array, typedarray);
+  NAPI_CREATE_TYPEDARRAY(int32_t*, arr, byte_len, arr_len, napi_int32_array, typedarray);
 
 
 /*
@@ -26,14 +26,15 @@
   NOTE: assuming that byte_offset is 0
 */
 #define NAPI_GET_TYPEDARRAY(typedarray, arr, byte_len, arr_len) \
+  ({ \
   napi_status in_status; \
   napi_typedarray_type type; \
   napi_value in_arr_buf; \
   size_t offset; \
   in_status = napi_get_typedarray_info(env, typedarray, &type, arr_len, NULL, &in_arr_buf, &offset); \
-  if (in_status != napi_ok) napi_throw_error(env, NULL, "napi_get_typedarray_info failed"); \
   in_status = napi_get_arraybuffer_info(env, in_arr_buf, (void**) &arr, byte_len); \
-  if (in_status != napi_ok) napi_throw_error(env, NULL, "napi_get_arraybuffer_info failed");
+  in_status; \
+  })
 
 /*
   create any type of napi typedarray from a C pointer
@@ -49,14 +50,15 @@
   NOTE: assuming that byte_offset is 0
 */
 #define NAPI_CREATE_TYPEDARRAY(c_type, arr, byte_len, arr_len, typedarray_type, typedarray) \
+  ({ \
   napi_status out_status; \
   napi_value out_arr_buf; \
   void* out_arr_ptr = NULL; \
   out_status = napi_create_arraybuffer(env, byte_len, &out_arr_ptr, &out_arr_buf); \
-  if (out_status != napi_ok) napi_throw_error(env, NULL, "napi_create_arraybuffer failed"); \
   out_status = napi_create_typedarray(env, typedarray_type, arr_len, out_arr_buf, 0, typedarray); \
-  if (out_status != napi_ok) napi_throw_error(env, NULL, "napi_create_typedarray failed"); \
-  c_type typed_arr_ptr = (c_type)(out_arr_ptr); \
-  for (size_t i = 0; i < arr_len; i++) typed_arr_ptr[i] = arr[i];
+  c_type typed_arr_ptr = (c_type) (out_arr_ptr); \
+  for (size_t i = 0; i < arr_len; i++) typed_arr_ptr[i] = arr[i]; \
+  out_status; \
+  })
 
 #endif
