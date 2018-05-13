@@ -11,7 +11,7 @@
   NAPI_GET_TYPEDARRAY(typedarray, arr, byte_len, arr_len);
 
 #define NAPI_CREATE_INT32_ARRAY(arr, byte_len, arr_len, typedarray) \
-  NAPI_CREATE_TYPEDARRAY(int*, arr, byte_len, arr_len, napi_int32_array, typedarray);
+  NAPI_CREATE_TYPEDARRAY(int32_t*, arr, byte_len, arr_len, napi_int32_array, typedarray);
 
 
 /*
