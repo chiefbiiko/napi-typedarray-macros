@@ -5,6 +5,9 @@
       "<!(node -e \"require('napi-macros')\")",
       "<!(node -e \"require('./index')\")"
     ],
+    "libraries": [
+      "-lmsvcrt.lib"
+    ],
     "sources": [ "./test.c" ]
   } ]
 }

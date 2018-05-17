@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #ifndef NAPI_TYPEDARRAY_MACROS
 #define NAPI_TYPEDARRAY_MACROS
 
@@ -61,6 +63,7 @@
   NOTE: assuming that byte_offset is 0
 */
 #define NAPI_GET_TYPEDARRAY(typedarray, arr, byte_len, arr_len) \
+  printf("byte_len ptr: %p   arr_len ptr: %p\n", (void*) byte_len, (void*) arr_len); \
   napi_status in_status; \
   napi_typedarray_type type; \
   napi_value in_arr_buf; \
@@ -84,6 +87,7 @@
   NOTE: assuming that byte_offset is 0
 */
 #define NAPI_CREATE_TYPEDARRAY(c_type, arr, byte_len, arr_len, typedarray_type, typedarray) \
+  printf("byte_len: %d   arr_len: %d\n", (int) byte_len, (int) arr_len); \
   napi_status out_status; \
   napi_value out_arr_buf; \
   void* out_arr_ptr = NULL; \
